@@ -13,19 +13,29 @@
 # http://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
 # ===================================================================
 
+eureka:
+  client:
+    enabled: false
+  instance:
+    appname: jhipster
+    instanceId: jhipster:${spring.application.instance-id:${random.value}}
+
 spring:
   profiles:
     # Uncomment the following line to enable tests against production database type rather than H2, using Testcontainers
     #active: testcontainers
   application:
-    name: HelloWorld
+    name: jhipster
+  cloud:
+    config:
+      enabled: false
 
   jackson:
     serialization:
       write-durations-as-timestamps: false
   liquibase:
     contexts: test
-    url: jdbc:h2:mem:helloworld;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    url: jdbc:h2:mem:jhipster;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
   mail:
     host: localhost
   main:
@@ -33,18 +43,18 @@ spring:
   messages:
     basename: i18n/messages
   r2dbc:
-    url: r2dbc:h2:mem:///helloworld;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    url: r2dbc:h2:mem:///jhipster;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
     username: r2dbc
     password:
   task:
     execution:
-      thread-name-prefix: hello-world-task-
+      thread-name-prefix: jhipster-task-
       pool:
         core-size: 1
         max-size: 50
         queue-capacity: 10000
     scheduling:
-      thread-name-prefix: hello-world-scheduling-
+      thread-name-prefix: jhipster-scheduling-
       pool:
         size: 20
   thymeleaf:
@@ -61,7 +71,7 @@ server:
 # ===================================================================
 jhipster:
   clientApp:
-    name: 'helloWorldApp'
+    name: 'jhipsterApp'
   logging:
     # To test json console appender
     use-json-format: false
@@ -73,6 +83,13 @@ jhipster:
   mail:
     from: test@localhost
     base-url: http://127.0.0.1:8080
+  security:
+    authentication:
+      jwt:
+        # This token must be encoded using Base64 (you can type `echo 'secret-key'|base64` on your command line)
+        base64-secret: YWRjZDkwODgwODYyMzVjYjRkMDM1YjI1ZjcxZmM5MjQ2NzU2Nzg3NjYxODM4NWRiYzRhNzZiMjU1NTBlNTY4ZmM3NjRjYzA3OWI1Y2U5ZDI0ZDY1ZjAzYmU2YWE2Mjk3MzRiNzg3ZDgyNDNlODY4MDRmYzE3OWQwYjdmZTcxNGI=
+        # Token is valid 24 hours
+        token-validity-in-seconds: 86400
 # ===================================================================
 # Application specific properties
 # Add your own application properties here, see the ApplicationProperties class

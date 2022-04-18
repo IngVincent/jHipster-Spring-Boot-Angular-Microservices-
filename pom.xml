@@ -5,12 +5,12 @@
                              https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.jhipster.helloworld</groupId>
-    <artifactId>hello-world</artifactId>
+    <groupId>com.ejemplo.spring</groupId>
+    <artifactId>jhipster</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
-    <name>Hello World</name>
-    <description>Description for HelloWorld</description>
+    <name>JHipster</name>
+    <description>Description for jhipster</description>
 
     <repositories>
         <!-- jhipster-needle-maven-repository -->
@@ -34,7 +34,7 @@
         <maven.build.timestamp.format>yyyyMMddHHmmss</maven.build.timestamp.format>
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
-        <start-class>com.jhipster.helloworld.HelloWorldApp</start-class>
+        <start-class>com.ejemplo.spring.JhipsterApp</start-class>
         <argLine>-Djava.security.egd=file:/dev/./urandom -Xmx512m</argLine>
         <m2e.apt.activation>jdt_apt</m2e.apt.activation>
         <run.addResources>false</run.addResources>
@@ -55,6 +55,7 @@
         <!-- The liquibase version should match the one managed by
         https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-dependencies/${spring-boot.version} -->
         <liquibase.version>4.6.1</liquibase.version>
+        <h2.version>1.4.200</h2.version>
         <validation-api.version>2.0.1.Final</validation-api.version>
         <commons-beanutils.version>1.9.4</commons-beanutils.version>
         <blockhound-junit-platform.version>1.0.6.RELEASE</blockhound-junit-platform.version>
@@ -267,10 +268,32 @@
             <groupId>org.zalando</groupId>
             <artifactId>problem-spring-webflux</artifactId>
         </dependency>
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt-impl</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt-jackson</artifactId>
+            <scope>compile</scope>
+        </dependency>
         <!-- Spring Cloud -->
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-bootstrap</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-config</artifactId>
         </dependency>
         <dependency>
             <groupId>io.micrometer</groupId>
@@ -282,7 +305,7 @@
         </dependency>
         <dependency>
             <groupId>org.testcontainers</groupId>
-            <artifactId>mysql</artifactId>
+            <artifactId>postgresql</artifactId>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -291,13 +314,13 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>dev.miku</groupId>
-            <artifactId>r2dbc-mysql</artifactId>
+            <groupId>io.r2dbc</groupId>
+            <artifactId>r2dbc-postgresql</artifactId>
             <scope>provided</scope>
         </dependency>
         <!-- jhipster-needle-maven-add-dependency -->
@@ -584,7 +607,7 @@
                             </platforms>
                         </from>
                         <to>
-                            <image>helloworld:latest</image>
+                            <image>jhipster:latest</image>
                         </to>
                         <container>
                             <entrypoint>
@@ -981,16 +1004,16 @@
             <dependencies>
                 <dependency>
                     <groupId>org.testcontainers</groupId>
-                    <artifactId>mysql</artifactId>
+                    <artifactId>postgresql</artifactId>
                     <scope>test</scope>
                 </dependency>
                 <dependency>
-                    <groupId>mysql</groupId>
-                    <artifactId>mysql-connector-java</artifactId>
+                    <groupId>org.postgresql</groupId>
+                    <artifactId>postgresql</artifactId>
                 </dependency>
                 <dependency>
-                    <groupId>dev.miku</groupId>
-                    <artifactId>r2dbc-mysql</artifactId>
+                    <groupId>io.r2dbc</groupId>
+                    <artifactId>r2dbc-postgresql</artifactId>
                 </dependency>
             </dependencies>
             <build>
@@ -1184,6 +1207,31 @@
                                     </pluginExecutions>
                                 </lifecycleMappingMetadata>
                             </configuration>
+                        </plugin>
+                    </plugins>
+                </pluginManagement>
+            </build>
+        </profile>
+        <profile>
+            <id>e2e</id>
+            <properties>
+                <profile.e2e>,e2e</profile.e2e>
+            </properties>
+            <build>
+                <finalName>e2e</finalName>
+                <pluginManagement>
+                    <plugins>
+                        <plugin>
+                            <groupId>org.springframework.boot</groupId>
+                            <artifactId>spring-boot-maven-plugin</artifactId>
+                            <executions>
+                                <execution>
+                                    <id>repackage</id>
+                                    <goals>
+                                        <goal>repackage</goal>
+                                    </goals>
+                                </execution>
+                            </executions>
                         </plugin>
                     </plugins>
                 </pluginManagement>
